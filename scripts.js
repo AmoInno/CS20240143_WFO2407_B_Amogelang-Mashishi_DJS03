@@ -3,29 +3,43 @@ import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
 let page = 1;
 let matches = books
 
-const starting = document.createDocumentFragment()
 
-for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
-    const element = document.createElement('button')
-    element.classList = 'preview'
-    element.setAttribute('data-preview', id)
+// Create HTML elements
 
-    element.innerHTML = `
-        <img
-            class="preview__image"
-            src="${image}"
-        />
-        
+function createElement(tag, className='', attribute={}){
+    const element = document.createElement(tag)
+    element.className = className
+    for(const [key, value] of Object.entries(attribute)){
+        element.setAttribute(key,value)
+    }
+    return element
+}
+
+
+function createBookPreview({ author, id, image, title }) {
+    const button = createElement('button', 'preview', { 'data-preview': id });
+    button.innerHTML = `
+        <img class="preview__image" src="${image}" />
         <div class="preview__info">
             <h3 class="preview__title">${title}</h3>
             <div class="preview__author">${authors[author]}</div>
         </div>
-    `
-
-    starting.appendChild(element)
+    `;
+    return button;
 }
 
-document.querySelector('[data-list-items]').appendChild(starting)
+
+
+const starting = document.createDocumentFragment()
+
+function loadBooks(bookList, container) {
+    container.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    for (const book of bookList) {
+        fragment.appendChild(createBookPreview(book));
+    }
+    container.appendChild(fragment);
+}
 
 const genreHtml = document.createDocumentFragment()
 const firstGenreElement = document.createElement('option')
