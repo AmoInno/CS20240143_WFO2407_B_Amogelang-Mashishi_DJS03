@@ -26,7 +26,7 @@ function createBookPreview({ author, id, image, title }) {
     return button;
 }
 
-function renderBooks(bookList, container) {
+function getBooks(bookList, container) {
     container.innerHTML = '';
     const fragment = document.createDocumentFragment();
     for (const book of bookList) {
@@ -35,7 +35,6 @@ function renderBooks(bookList, container) {
     container.appendChild(fragment);
 }
 
-// ** UI Rendering Functions **
 function populateSelect(element, options, defaultOption) {
     const fragment = document.createDocumentFragment();
     const defaultEl = createElement('option', '', { value: 'any' });
@@ -67,7 +66,7 @@ function updateShowMoreButton(matches, page) {
 
 
 const initialBooks = matches.slice(0, BOOKS_PER_PAGE);
-renderBooks(initialBooks, document.querySelector('[data-list-items]'));
+getBooks(initialBooks, document.querySelector('[data-list-items]'));
 populateSelect(document.querySelector('[data-search-genres]'), genres, 'All Genres');
 populateSelect(document.querySelector('[data-search-authors]'), authors, 'All Authors');
 updateShowMoreButton(matches, page);
@@ -125,7 +124,7 @@ document.querySelector('[data-search-form]').addEventListener('submit', (event) 
 
 document.querySelector('[data-list-button]').addEventListener('click', () => {
     const nextBooks = matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE);
-    renderBooks(nextBooks, document.querySelector('[data-list-items]'));
+    getBooks(nextBooks, document.querySelector('[data-list-items]'));
     page += 1;
     updateShowMoreButton(matches, page);
 });
